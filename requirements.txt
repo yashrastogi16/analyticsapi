@@ -1,0 +1,4 @@
+Python version 2.7
+Django version 1.7
+RestFramework version 3.0.0
+django-cors-headers
