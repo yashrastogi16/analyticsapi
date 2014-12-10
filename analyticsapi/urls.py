@@ -25,5 +25,6 @@ urlpatterns = patterns('',
     url(r'^stampdelivered/(?P<id>[a-zA-Z0-9]+)$', 'api.views.store', name='store'),
     url(r'^storeusers/(?P<id>[a-zA-Z0-9]+)$', 'api.views.usernum', name='usernum'),
     url(r'^redeemrewards/(?P<id>[a-zA-Z0-9]+)$', 'api.views.redeemreward', name='redeemreward'),
+    url(r'^analytics/(?P<id>[a-zA-Z0-9]+)$','api.views.analytics',name='analytics')
     # url(r'^snippets/(?P<pk>[0-9]+)$', 'snippet_detail', name='snippet_detail'),
 )

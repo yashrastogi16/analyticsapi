@@ -64,6 +64,8 @@ def userd(request, id):
 		return Response(serializer.data)
 
 
+# Total Number of stamp Delivered
+
 @api_view(['GET', 'POST'])
 def store(request, id):
 	try:
@@ -82,6 +84,7 @@ def store(request, id):
 		return Response(tcount)
 
 # Total number of User of Particular Store
+
 @api_view(['GET', 'POST'])
 def usernum(request, id):
 	try:
@@ -100,6 +103,7 @@ def usernum(request, id):
 		return Response(tcount)
 
 # Total number of stamps Redeemed
+
 @api_view(['GET', 'POST'])
 def redeemreward(request, id):
 	try:
@@ -116,3 +120,42 @@ def redeemreward(request, id):
 		# serializer.data.append(count)
 		tcount['count'] = count
 		return Response(tcount)
+
+@api_view(['GET', 'POST'])
+def analytics(request, id):
+	try:
+		strmp = stamptransaction.objects.filter(store = id)
+		usernum = membership.objects.filter(store = id)
+		redeem = rewards.objects.filter(store = id, redeem_status = 'true')
+	except redeem.DoesNotExist:
+		return Response(status=status.HTTP_404_NOT_FOUND)
+	if request.method == 'GET':
+		stamp_count = 0
+		redeem_count = 0
+		user_count = 0
+		tcount = {}
+		data = {}
+		serializer1 = stamptransactionSerializer(strmp, many=True)
+		serializer2 = membershipSerializer(usernum, many=True)
+		serializer3 = rewardsSerializers(redeem, many=True)
+		for i in serializer1.data:
+			stamp_count += 1
+		for i in serializer2.data:
+			user_count += 1
+		for i in serializer3.data:
+			redeem_count += 1
+		if strmp and usernum and redeem:
+			data['stamp_count'] = stamp_count
+			data['user_count'] = user_count
+			data['redeem_count'] = redeem_count
+			tcount['data'] = data
+			tcount['code'] = 1
+			tcount.update(tcount)
+			print type(tcount)
+			print tcount
+		else:
+			data['msg'] = 'Invalid Store'
+			tcount['data'] = data
+			tcount['code'] = 0
+		return Response(tcount)
+
